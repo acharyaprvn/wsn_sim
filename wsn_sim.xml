@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<worldsens xmlns="http://worldsens.citi.insa-lyon.fr">
+<!--
+ == Worldsens ===================================================== 
+-->
+<simulation nodes="50" duration="20s" x="1000" y="500" z="0"/>
+<!--
+ == Entities ====================================================== 
+-->
+
+<entity name="fir" library="environment_fire">
+<init start = "5s"  heat="20"/>
+</entity>
+<!--
+ == PROPAGATION, INTERFERENCES and MODULATION ===================== 
+-->
+<entity name="range" library="propagation_range">
+</entity>
+<entity name="interf" library="interferences_orthogonal"></entity>
+<entity name="none" library="modulation_none"></entity>
+<!--
+ == RADIO and ANTENNA ============================================ 
+-->
+<entity name="omnidirectionnal" library="antenna_omnidirectionnal">
+</entity>
+<entity name="radio" library="radio_half1d">
+</entity>
+<!--
+ == MAC ===================================================== 
+-->
+<entity name="mac" library="mac_dcf_802_11"></entity>
+
+<!--
+ == MOBILITY ===================================================== 
+-->
+<entity name="static-pos" library="mobility_static">
+<default x="random" y="random" z="random"/>
+</entity>
+
+<!-- == BATTERY ======================================================== -->
+
+<entity name="battery" library="energy_linear" >
+<default energy="200000000" tx="2" rx="1"/>
+</entity>
+
+<!--
+ == Environment ===================================================== 
+-->
+<environment>
+<propagation entity="range" range="30"/>
+<interferences entity="interf"/>
+<modulation entity="none"/>
+<with entity = "fir" />
+</environment>
+<!--
+ == Bundle ===================================================== 
+-->
+<bundle name="sensor" worldsens="false" default="true" birth="0">
+<mobility entity="static-pos"/>
+<energy entity="battery"/> 
+<antenna entity="omnidirectionnal">
+<up entity="radio"/>
+</antenna>
+<with entity="radio">
+<up entity="mac"/>
+<down entity="omnidirectionnal"/>
+</with>
+</bundle>
+
+
+<!--
+ == Nodes ===================================================== 
+-->
+
+</worldsens>
